@@ -9,8 +9,8 @@ const AppRouter: React.FC = () => {
     <BrowserRouter>
       <AppShellLayout>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/stock/:symbol" element={<StockDetails />} />
+          <Route path="/stock-math/" element={<Home />} />
+          <Route path="/stock-math/stock/:symbol" element={<StockDetails />} />
         </Routes>
       </AppShellLayout>
     </BrowserRouter>
