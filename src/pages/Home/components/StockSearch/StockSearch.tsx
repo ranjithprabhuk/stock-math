@@ -85,7 +85,7 @@ const StockSearch: React.FC<IStockSearch> = () => {
   };
 
   const handleSelectStock = (symbol: string) => {
-    navigate(`/stock/${symbol}`);
+    navigate(`/stock-math/stock/${symbol}`);
   };
 
   return (
