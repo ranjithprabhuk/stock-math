@@ -34,6 +34,16 @@ jobs:
 
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        run: npm run deploy
+        run: |
+          # Set GitHub Pages deployment branch URL
+          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          npm run deploy
+
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        run: |
+          # Set GitHub Pages deployment branch URL
+          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          npm run deploy
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
