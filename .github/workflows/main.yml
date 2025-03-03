@@ -3,7 +3,7 @@ name: Deploy Stock Math Application to GitHub Pages
 on:
   push:
     branches:
-      - main  # Trigger deployment on push to the 'main' branch
+      - main # Trigger deployment on push to the 'main' branch
 
 jobs:
   build:
@@ -21,6 +21,12 @@ jobs:
       # Set CI=false to avoid treating warnings as errors
       - name: Set CI to false
         run: echo "CI=false" >> $GITHUB_ENV
+
+      # Configure Git identity for commit
+      - name: Configure Git user
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
 
       # Build the React app
       - name: Build the React app
