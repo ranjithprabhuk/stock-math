@@ -1,0 +1,75 @@
+/* Styles for the search results container */
+.search-results {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding: 10px;
+}
+
+/* Style for each search result item */
+.search-result-item {
+  padding: 10px;
+  margin-bottom: -8px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s ease;
+}
+
+.search-result-item:hover {
+  background-color: #f0f0f0;
+}
+
+/* Style for the flag and text container */
+.search-result-item .mantine-Group-root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-result-item .mantine-Text-root {
+  color: #777;
+}
+
+.search-result-item .mantine-Text-root:first-child {
+  font-weight: 500;
+}
+
+/* Style for flag icon */
+.search-result-item img {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+/* Scrollable results */
+.search-results .mantine-Stack-root {
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-width: thin; /* For Firefox */
+}
+
+.search-results .mantine-Stack-root::-webkit-scrollbar {
+  width: 6px; /* For Webkit browsers */
+}
+
+.search-results .mantine-Stack-root::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.search-results .mantine-Stack-root::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+  .search-results {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.stock-info {
+  text-align: left;
+}
