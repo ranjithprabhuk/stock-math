@@ -7,43 +7,19 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
-
+    
     steps:
-      # Checkout the code from GitHub repository
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-      # Install dependencies
-      - name: Install dependencies
-        run: npm install
+    # Set CI=false to avoid treating warnings as errors
+    - name: Set CI to false
+      run: echo "CI=false" >> $GITHUB_ENV
 
-      # Set CI=false to avoid treating warnings as errors
-      - name: Set CI to false
-        run: echo "CI=false" >> $GITHUB_ENV
+    - name: Build and Deploy React app to GitHub Pages
+      uses: omkartapale/react-deployment-gh-pages@v1.0.0
 
-      # Configure Git identity for commit
-      - name: Configure Git user
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
 
-      # Build the React app
-      - name: Build the React app
-        run: npm run build
 
-      # Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        run: |
-          # Set GitHub Pages deployment branch URL
-          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          npm run deploy
 
-      # Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        run: |
-          # Set GitHub Pages deployment branch URL
-          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          npm run deploy
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
