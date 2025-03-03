@@ -1,25 +1,27 @@
-name: Deploy Stock Math Application to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - main # Trigger deployment on push to the 'main' branch
+      - main # or your default branch
 
 jobs:
-  build:
-
+  deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # Set CI=false to avoid treating warnings as errors
-    - name: Set CI to false
-      run: echo "CI=false" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build and Deploy React app to GitHub Pages
-      uses: omkartapale/react-deployment-gh-pages@v1.0.0
+      - name: Build app
+        run: npm run build
 
-
-
-
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: build
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
