@@ -1,31 +1,35 @@
-name: Deploy to GitHub Pages
+name: Deploy React App to GitHub Pages
 
 on:
   push:
-    branches:
-      - main # or your default branch
+    branches: [ main ]  # Change to 'master' if that's your default branch
+
+permissions:
+  contents: write
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout 🛎️
         uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: npm install
+      - name: Setup Node.js ⚙️
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+          cache: 'npm'
+          
+      - name: Install Dependencies 📦
+        run: npm ci
         
-      # Set CI=false to avoid treating warnings as errors
-      - name: Set CI to false
-        run: echo "CI=false" >> $GITHUB_ENV
-
-      - name: Build app
+      - name: Build 🔧
         run: npm run build
-
-      - name: Deploy to GitHub Pages
+        env:
+          CI: false  # This prevents treating warnings as errors
+        
+      - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages
-          folder: build
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          folder: build  # The folder the action should deploy
+          branch: gh-pages  # The branch the action should deploy to
