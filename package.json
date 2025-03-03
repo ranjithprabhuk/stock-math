@@ -2,6 +2,7 @@
   "name": "stock-math",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://ranjithprabhuk.github.io/stock-math",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@mantine/core": "^7.17.1",
@@ -29,7 +30,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -50,6 +52,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-world-flags": "^1.6.0"
+    "@types/react-world-flags": "^1.6.0",
+    "gh-pages": "^6.3.0"
   }
 }
