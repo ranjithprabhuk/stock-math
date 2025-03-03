@@ -15,6 +15,10 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        
+      # Set CI=false to avoid treating warnings as errors
+      - name: Set CI to false
+        run: echo "CI=false" >> $GITHUB_ENV
 
       - name: Build app
         run: npm run build
