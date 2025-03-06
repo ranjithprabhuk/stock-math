@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = () => {
       <Group justify="space-between" style={{ width: '100%' }}>
         <div className="logo-container">
           <Title order={3} className="logo-text">
-            Stock Math
+            Stock <span className={'gradient-text'}>Math</span>
           </Title>
         </div>
 
