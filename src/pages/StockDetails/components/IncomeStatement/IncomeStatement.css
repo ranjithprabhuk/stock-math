@@ -1,0 +1,116 @@
+/* IncomeStatement.css */
+.income-statement-container {
+  padding: 1.5rem;
+  background: linear-gradient(to bottom right, #f8f9fa, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.income-statement-header {
+  margin-bottom: 2rem;
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.chart-container {
+  margin: 1.5rem 0;
+  transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Custom styling for the accordion */
+.income-accordion .mantine-Accordion-item {
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #eaeaea;
+}
+
+.income-accordion .mantine-Accordion-control {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.income-accordion .mantine-Accordion-control:hover {
+  background-color: #f0f0f0;
+}
+
+.income-accordion .mantine-Accordion-content {
+  padding: 1.5rem;
+  background-color: white;
+}
+
+/* Customized colors for each chart type */
+.revenue-chart .recharts-bar-rectangle path {
+  fill: #6246ea !important;
+}
+
+.gross-profit-chart .recharts-bar-rectangle path {
+  fill: #2cb67d !important;
+}
+
+.operating-income-chart .recharts-bar-rectangle path {
+  fill: #ff8906 !important;
+}
+
+.net-income-chart .recharts-bar-rectangle path {
+  fill: #e53170 !important;
+}
+
+.ebitda-chart .recharts-bar-rectangle path {
+  fill: #7f5af0 !important;
+}
+
+/* Animation for charts */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chart-animation {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Tooltip customization */
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 10px 14px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-label {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  margin-bottom: 5px !important;
+}
+
+.recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-item {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .income-statement-container {
+    padding: 1rem;
+  }
+
+  .income-accordion .mantine-Accordion-content {
+    padding: 1rem;
+  }
+}
