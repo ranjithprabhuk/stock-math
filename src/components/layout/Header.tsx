@@ -54,7 +54,7 @@ const Header: React.FC<HeaderProps> = () => {
               />
             </div>
 
-            {isLoggedIn ? (
+            {/* {isLoggedIn ? (
               <Avatar color="blue" radius="xl">
                 <IconUser size="1.5rem" />
               </Avatar>
@@ -65,12 +65,12 @@ const Header: React.FC<HeaderProps> = () => {
                 </Button>
                 <Button size="sm">Sign Up</Button>
               </Group>
-            )}
+            )} */}
 
             {/* Demo toggle - remove in production */}
-            <Button onClick={toggleLogin} size="xs" variant="outline" style={{ marginLeft: '8px' }}>
+            {/* <Button onClick={toggleLogin} size="xs" variant="outline" style={{ marginLeft: '8px' }}>
               {isLoggedIn ? 'Logout' : 'Login'} (Demo)
-            </Button>
+            </Button> */}
           </Group>
         </Group>
       </Group>
