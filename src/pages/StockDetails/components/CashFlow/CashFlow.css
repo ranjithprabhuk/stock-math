@@ -1,0 +1,101 @@
+/* CashFlow.css */
+.cash-flow-container {
+  padding: 20px;
+  background: linear-gradient(to right, #f8f9fa, #e9ecef);
+  border-radius: 8px;
+}
+
+.cash-flow-title {
+  color: #2c3e50;
+  font-weight: 700;
+  margin-bottom: 24px;
+  font-size: 1.8rem;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.chart-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Custom accordion styling */
+.cash-flow-accordion {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.accordion-item {
+  border: none;
+  margin-bottom: 8px;
+  overflow: hidden;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.accordion-control {
+  background-color: #f8f9fa;
+  border-left: 4px solid #3498db;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.accordion-control:hover {
+  background-color: #e9ecef;
+}
+
+.accordion-panel {
+  padding: 15px;
+  background-color: #ffffff;
+}
+
+/* Individual section colors */
+.operating-cashflow .accordion-control {
+  border-left-color: #8884d8;
+}
+
+.capital-expenditures .accordion-control {
+  border-left-color: #82ca9d;
+}
+
+.investment-cashflow .accordion-control {
+  border-left-color: #ffc658;
+}
+
+.financing-cashflow .accordion-control {
+  border-left-color: #ff8042;
+}
+
+.free-cashflow .accordion-control {
+  border-left-color: #8dd1e1;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.error-alert {
+  border-left: 5px solid #e74c3c;
+  background-color: #fadbd8;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cash-flow-title {
+    font-size: 1.5rem;
+  }
+
+  .chart-container {
+    padding: 10px;
+  }
+}

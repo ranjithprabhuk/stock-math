@@ -2,9 +2,10 @@ import React from 'react';
 import { Container, Title, Grid, Text, Stack, Group, Card, Loader } from '@mantine/core';
 import { useStockData } from '../../../../context/stock-data';
 import DCFValuation from '../DcfValuation/DcfValuation';
-import ProfitabilityScore from '../ProfitabilityScore/ProfitabilityScore';
-import SolvencyScore from '../SolvencyScore/SolvencyScore';
+import ProfitabilityScore from '../FinancialScoreAnalysis/ProfitabilityScore';
+import SolvencyScore from '../FinancialScoreAnalysis/SolvencyScore';
 import EconomicMoat from '../EconomicMoat/EconomicMoat';
+import FinancialScoreAnalysis from '../FinancialScoreAnalysis/FinancialScoreAnalysis';
 
 export const StockAnalysisDashboard: React.FC = () => {
   const { companyOverview, loadingOverview, errorOverview } = useStockData();
@@ -34,44 +35,36 @@ export const StockAnalysisDashboard: React.FC = () => {
   }
 
   return (
-    <Container size="xl" py="xl">
-      <Stack>
-        <Group>
-          <Stack>
-            <Title order={1}>
-              {companyOverview.Name} ({companyOverview.Symbol})
-            </Title>
-            <Text size="sm" color="dimmed">
-              {companyOverview.Exchange} · {companyOverview.Industry}
-            </Text>
-          </Stack>
-          <Stack align="flex-end">
-            <Title order={2}>${parseFloat(companyOverview.price || '0').toFixed(2)}</Title>
-            <Text size="sm" color="dimmed">
-              Market Cap: ${(parseFloat(companyOverview.MarketCapitalization || '0') / 1000000000).toFixed(2)}B
-            </Text>
-          </Stack>
-        </Group>
+    <Stack>
+      <Group>
+        <Stack>
+          <Title order={1}>
+            {companyOverview.Name} ({companyOverview.Symbol})
+          </Title>
+          <Text size="sm" color="dimmed">
+            {companyOverview.Exchange} · {companyOverview.Industry}
+          </Text>
+        </Stack>
+        <Stack align="flex-end">
+          <Title order={2}>${parseFloat(companyOverview.price || '0').toFixed(2)}</Title>
+          <Text size="sm" color="dimmed">
+            Market Cap: ${(parseFloat(companyOverview.MarketCapitalization || '0') / 1000000000).toFixed(2)}B
+          </Text>
+        </Stack>
+      </Group>
 
-        <Grid>
-          <Grid.Col span={12}>
-            <DCFValuation />
-          </Grid.Col>
+      <Grid>
+        <Grid.Col span={12}>
+          <DCFValuation />
+        </Grid.Col>
 
-          <Grid.Col span={12}>
-            <ProfitabilityScore />
-          </Grid.Col>
+        <FinancialScoreAnalysis />
 
-          <Grid.Col span={12}>
-            <SolvencyScore />
-          </Grid.Col>
-
-          <Grid.Col span={12}>
-            <EconomicMoat />
-          </Grid.Col>
-        </Grid>
-      </Stack>
-    </Container>
+        <Grid.Col span={12}>
+          <EconomicMoat />
+        </Grid.Col>
+      </Grid>
+    </Stack>
   );
 };
 

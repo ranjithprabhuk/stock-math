@@ -1,0 +1,137 @@
+/* Common styles for both components */
+.scoreCard {
+  height: 100%;
+  transition: all 0.3s ease;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+}
+
+.scoreCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.cardTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1c2433;
+  letter-spacing: -0.5px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.cardTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #228be6, #5c7cfa);
+  border-radius: 2px;
+}
+
+.ringContainer {
+  background-color: rgba(243, 244, 246, 0.5);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ringContainer:hover {
+  background-color: rgba(243, 244, 246, 0.8);
+}
+
+.scoreRing {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.scoreValue {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.metricsContainer {
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* Customize scrollbar */
+.metricsContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.metricsContainer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.metricsContainer::-webkit-scrollbar-thumb {
+  background: #c1c2c5;
+  border-radius: 10px;
+}
+
+.metricsContainer::-webkit-scrollbar-thumb:hover {
+  background: #a1a2a5;
+}
+
+.metricItem {
+  background-color: rgba(248, 249, 250, 0.8);
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.metricItem:hover {
+  transform: translateX(5px);
+  border-left: 3px solid #228be6;
+}
+
+.directionIndicator {
+  color: #868e96;
+  background-color: #f1f3f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Color classes for metrics */
+.green {
+  color: #40c057;
+}
+
+.teal {
+  color: #20c997;
+}
+
+.yellow {
+  color: #fcc419;
+}
+
+.orange {
+  color: #fd7e14;
+}
+
+.red {
+  color: #fa5252;
+}
+
+.metricValue {
+  font-size: 1.1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cardTitle {
+    font-size: 1.2rem;
+  }
+
+  .scoreValue {
+    font-size: 1.6rem;
+  }
+
+  .metricValue {
+    font-size: 1rem;
+  }
+}

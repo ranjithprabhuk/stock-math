@@ -1,6 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Card, Text, Group, Skeleton, Alert, Stack, Progress, Badge, Grid, Title } from '@mantine/core';
+import {
+  Card,
+  Text,
+  Group,
+  Skeleton,
+  Alert,
+  Stack,
+  Progress,
+  Badge,
+  Grid,
+  Title,
+  rem,
+  RingProgress,
+} from '@mantine/core';
 import { useStockData } from '../../../../context/stock-data';
+import './EconomicMoat.css';
 
 interface MoatMetric {
   name: string;
@@ -191,101 +205,151 @@ export const EconomicMoat = () => {
     setMoatRating(moatRating);
   };
 
+  // Updated color function for moat ratings
   const getMoatColor = (rating: MoatRating): string => {
     switch (rating) {
       case 'Wide':
-        return 'green';
+        return '#22c55e'; // Green
       case 'Moderate':
-        return 'teal';
+        return '#f97316'; // Orange
       case 'Narrow':
-        return 'yellow';
+        return '#eab308'; // Yellow
       case 'None':
-        return 'red';
+        return '#94a3b8'; // Grey
       default:
-        return 'gray';
+        return '#94a3b8'; // Grey as fallback
     }
   };
 
+  // And update the getMetricColor function for consistency
   const getMetricColor = (score: number, maxScore: number = 3): string => {
     const percentage = (score / maxScore) * 100;
-    if (percentage >= 80) return 'green';
-    if (percentage >= 50) return 'teal';
-    if (percentage >= 30) return 'yellow';
-    return 'gray';
+    if (percentage >= 80) return '#22c55e'; // Green
+    if (percentage >= 50) return '#f97316'; // Orange
+    if (percentage >= 30) return '#eab308'; // Yellow
+    return '#94a3b8'; // Grey
   };
 
   if (loading) {
-    return <Skeleton height={350} />;
+    return <Skeleton height={350} radius="md" animate />;
   }
 
   if (error) {
     return (
-      <Alert color="red" title="Economic Moat Analysis Error">
+      <Alert color="red" title="Economic Moat Analysis Error" className="error-alert">
         {error}
       </Alert>
     );
   }
 
   return (
-    <Card shadow="sm" padding="lg" withBorder>
-      <Title order={3} mb="md">
+    <Card shadow="sm" padding="lg" radius="md" withBorder className="moat-card">
+      <Title order={3} className="card-title">
         Economic Moat Analysis
       </Title>
 
       <Grid>
-        <Grid.Col span={4}>
-          <Stack align="center">
-            <Progress
-              value={moatScore}
-              color={getMoatColor(moatRating)}
-              size="xl"
-              radius="xl"
-              style={{ width: '100%' }}
-            />
+        <Grid.Col span={{ base: 12, sm: 4 }}>
+          <Stack align="center" className="moat-rating-container">
+            <div className="progress-wrapper">
+              <svg width="200" height="110" viewBox="0 0 200 110">
+                {/* Background gradient definition */}
+                <defs>
+                  <linearGradient id="moatGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor={`${getMoatColor(moatRating)}88`} />
+                    <stop offset="100%" stopColor={getMoatColor(moatRating)} />
+                  </linearGradient>
 
-            <Badge size="xl" color={getMoatColor(moatRating)} variant="filled" style={{ width: '80%' }}>
+                  {/* Optional glow effect */}
+                  <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                </defs>
+
+                {/* Background semi-circle with slight transparency */}
+                <path
+                  d="M20,100 A80,80 0 0,1 180,100"
+                  fill="none"
+                  stroke="#e2e8f080"
+                  strokeWidth="16"
+                  strokeLinecap="round"
+                />
+
+                {/* Progress semi-circle with gradient and glow */}
+                <path
+                  d="M20,100 A80,80 0 0,1 180,100"
+                  fill="none"
+                  stroke="url(#moatGradient)"
+                  strokeWidth="16"
+                  strokeDasharray={`${(Math.PI * 80 * moatScore) / 100} ${(Math.PI * 80 * (100 - moatScore)) / 100}`}
+                  strokeDashoffset="0"
+                  strokeLinecap="round"
+                  filter="url(#glow)"
+                />
+
+                {/* Add tickmarks for visual reference */}
+                {[0, 25, 50, 75, 100].map((tick) => {
+                  const angle = (Math.PI * tick) / 100;
+                  const x = 100 - 90 * Math.cos(angle);
+                  const y = 100 - 90 * Math.sin(angle);
+                  return (
+                    <circle
+                      key={tick}
+                      cx={x}
+                      cy={y}
+                      r={tick % 50 === 0 ? 3 : 2}
+                      fill={tick <= moatScore ? getMoatColor(moatRating) : '#cbd5e1'}
+                    />
+                  );
+                })}
+              </svg>
+
+              {/* Score display with improved styling */}
+              <div className="score-display">
+                <Text className="progress-score">{Math.round(moatScore)}</Text>
+              </div>
+            </div>
+            <Badge size="xl" color={getMoatColor(moatRating)} variant="filled" className="moat-badge">
               <Text size="lg">{moatRating} Moat</Text>
             </Badge>
-
-            <Text color="dimmed" size="sm">
-              Score: {moatScore.toFixed(1)}/100
-            </Text>
-
-            <Text color="dimmed" size="xs" mt="md">
+            <Text className="score-text">Score: {moatScore.toFixed(1)}/100</Text>
+            <Text className="moat-description">
               An economic moat is a company's ability to maintain competitive advantages to protect its long-term
               profits and market share.
             </Text>
           </Stack>
         </Grid.Col>
 
-        <Grid.Col span={8}>
-          <Stack>
+        <Grid.Col span={{ base: 12, sm: 8 }}>
+          <Stack className="metrics-container">
             {metrics.map((metric, index) => (
-              <Stack key={index}>
-                <Group>
-                  <Text>{metric.name}</Text>
-                  <Group>
-                    <Text>{metric.score}/3</Text>
-                  </Group>
+              <div key={index} className="metric-item">
+                <Group justify="space-between" wrap="nowrap">
+                  <Text fw={500} className="metric-name">
+                    {metric.name}
+                  </Text>
+                  <Text className="metric-score">{metric.score}/3</Text>
                 </Group>
 
-                <Group grow>
+                <Group grow className="score-bar-container">
                   {Array.from({ length: 3 }).map((_, i) => (
                     <Progress
                       key={i}
                       value={i < metric.score ? 100 : 0}
                       color={i < metric.score ? getMetricColor(metric.score) : 'gray'}
-                      size="md"
-                      radius="xs"
+                      size="lg"
+                      radius="sm"
+                      className="score-bar"
                     />
                   ))}
                 </Group>
 
-                <Text color="dimmed" size="xs">
-                  {metric.description}
-                </Text>
-                <Text size="xs">{metric.details}</Text>
-              </Stack>
+                <Group className="metric-details-container">
+                  <Text className="metric-description">{metric.description}</Text>
+                  <Text className="metric-details">{metric.details}</Text>
+                </Group>
+              </div>
             ))}
           </Stack>
         </Grid.Col>

@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Card, Text, Group, Badge, RingProgress, Skeleton, Alert, Stack, Title } from '@mantine/core';
+import React, { useState, useEffect } from 'react';
 import { useStockData } from '../../../../context/stock-data';
+import './DcfValuation.css'; // Import custom CSS
+import DCFValuationRing from './DCFValuationRing';
 
 // DCF calculation constants
 const DISCOUNT_RATES = {
@@ -143,86 +144,81 @@ export const DCFValuation = () => {
   };
 
   if (loading) {
-    return <Skeleton height={350} />;
+    return <div className="dcf-loading-skeleton"></div>;
   }
 
   if (error) {
     return (
-      <Alert color="red" title="Valuation Error">
-        {error}
-      </Alert>
+      <div className="dcf-error">
+        <div className="dcf-error-title">Valuation Error</div>
+        <div className="dcf-error-message">{error}</div>
+      </div>
     );
   }
 
   return (
-    <Card shadow="sm" padding="lg" withBorder>
-      <Title order={3} mb="md">
-        DCF Valuation Analysis
-      </Title>
+    <div className="dcf-card">
+      <div className="dcf-header">
+        <h2 className="dcf-title">DCF Valuation Analysis</h2>
+        <div className="dcf-subtitle">Discounted Cash Flow model based on projected growth</div>
+      </div>
 
       {normalCaseValuation && (
-        <Stack>
-          <Group>
-            <Stack>
-              <Text>Current Market Price</Text>
-              <Text size="xl">${normalCaseValuation.marketPrice.toFixed(2)}</Text>
-            </Stack>
+        <div className="dcf-content">
+          {/* Main valuation display */}
+          <div className="dcf-main-valuation">
+            <div className="dcf-price-display">
+              <div className="dcf-label">Current Market Price</div>
+              <div className="dcf-price">${normalCaseValuation.marketPrice.toFixed(2)}</div>
+            </div>
 
-            <RingProgress
-              size={120}
-              thickness={12}
-              sections={[
-                {
-                  value: Math.min(Math.abs(normalCaseValuation.valuationGap), 100),
-                  color: normalCaseValuation.undervalued ? 'green' : 'red',
-                },
-              ]}
-              label={
-                <Text color={normalCaseValuation.undervalued ? 'green' : 'red'} size="xl">
-                  {normalCaseValuation.valuationGap > 0 ? '+' : ''}
-                  {normalCaseValuation.valuationGap.toFixed(1)}%
-                </Text>
-              }
-            />
-          </Group>
+            {/* Custom circular progress */}
+            <DCFValuationRing valuationGap={normalCaseValuation.valuationGap} />
+          </div>
 
-          <Badge size="lg" color={normalCaseValuation.undervalued ? 'green' : 'red'} fullWidth>
+          {/* Valuation status badge */}
+          <div className={`dcf-status-badge ${normalCaseValuation.undervalued ? 'positive' : 'negative'}`}>
             {normalCaseValuation.undervalued ? 'UNDERVALUED' : 'OVERVALUED'}
-          </Badge>
+          </div>
 
-          <Group grow>
-            <Card withBorder p="sm">
-              <Text size="sm" color="dimmed">
-                Worst Case
-              </Text>
-              <Text size="lg">${worstCaseValuation?.intrinsicValue.toFixed(2) || 'N/A'}</Text>
-            </Card>
+          {/* Scenario cases */}
+          <div className="dcf-scenarios">
+            <div className="dcf-scenario-card worst">
+              <div className="dcf-scenario-label">Worst Case</div>
+              <div className="dcf-scenario-value">${worstCaseValuation?.intrinsicValue.toFixed(2) || 'N/A'}</div>
+              <div className="dcf-scenario-details">
+                <div>Growth: {GROWTH_RATES.worstCase * 100}%</div>
+                <div>Discount: {DISCOUNT_RATES.worstCase * 100}%</div>
+              </div>
+            </div>
 
-            <Card withBorder p="sm">
-              <Text size="sm" color="dimmed">
-                Normal Case
-              </Text>
-              <Text size="lg" color={normalCaseValuation.undervalued ? 'green' : 'red'}>
-                ${normalCaseValuation.intrinsicValue.toFixed(2)}
-              </Text>
-            </Card>
+            <div className={`dcf-scenario-card normal ${normalCaseValuation.undervalued ? 'positive' : 'negative'}`}>
+              <div className="dcf-scenario-label">Normal Case</div>
+              <div className="dcf-scenario-value">${normalCaseValuation.intrinsicValue.toFixed(2)}</div>
+              <div className="dcf-scenario-details">
+                <div>Growth: {GROWTH_RATES.normalCase * 100}%</div>
+                <div>Discount: {DISCOUNT_RATES.normalCase * 100}%</div>
+              </div>
+            </div>
 
-            <Card withBorder p="sm">
-              <Text size="sm" color="dimmed">
-                Best Case
-              </Text>
-              <Text size="lg">${bestCaseValuation?.intrinsicValue.toFixed(2) || 'N/A'}</Text>
-            </Card>
-          </Group>
+            <div className="dcf-scenario-card best">
+              <div className="dcf-scenario-label">Best Case</div>
+              <div className="dcf-scenario-value">${bestCaseValuation?.intrinsicValue.toFixed(2) || 'N/A'}</div>
+              <div className="dcf-scenario-details">
+                <div>Growth: {GROWTH_RATES.bestCase * 100}%</div>
+                <div>Discount: {DISCOUNT_RATES.bestCase * 100}%</div>
+              </div>
+            </div>
+          </div>
 
-          <Text size="sm" color="dimmed">
+          <div className="dcf-methodology">
             This DCF valuation accounts for projected free cash flows with {GROWTH_RATES.normalCase * 100}% growth
-            (normal case), discounted at {DISCOUNT_RATES.normalCase * 100}% with a terminal growth rate of
+            (normal case), discounted at {DISCOUNT_RATES.normalCase * 100}% with a terminal growth rate of{' '}
             {TERMINAL_GROWTH_RATES.normalCase * 100}%.
-          </Text>
-        </Stack>
+          </div>
+        </div>
       )}
-    </Card>
+    </div>
   );
 };
 

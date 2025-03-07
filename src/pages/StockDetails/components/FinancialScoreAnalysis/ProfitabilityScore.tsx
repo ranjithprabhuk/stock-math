@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Card, Text, Group, RingProgress, Skeleton, Alert, Stack, Grid, Title } from '@mantine/core';
+import { Card, Text, Group, RingProgress, Skeleton, Alert, Stack, Grid, Title, Paper } from '@mantine/core';
 import { useStockData } from '../../../../context/stock-data';
+import './FinancialScoreAnalysis.css';
 
 interface ProfitabilityMetric {
   name: string;
@@ -136,48 +137,64 @@ export const ProfitabilityScore = () => {
   };
 
   if (loading) {
-    return <Skeleton height={350} />;
+    return <Skeleton height={350} radius="md" animate />;
   }
 
   if (error) {
     return (
-      <Alert color="red" title="Profitability Analysis Error">
+      <Alert color="red" title="Profitability Analysis Error" radius="md">
         {error}
       </Alert>
     );
   }
 
   return (
-    <Card shadow="sm" padding="lg" withBorder>
-      <Title order={3} mb="md">
+    <Card shadow="sm" padding="xl" radius="md" withBorder className="scoreCard">
+      <Title order={3} mb="lg" className="cardTitle">
         Profitability Analysis
       </Title>
 
       <Grid>
         <Grid.Col span={4}>
-          <Stack>
-            <RingProgress
-              size={160}
-              thickness={16}
-              roundCaps
-              sections={[{ value: profitabilityScore, color: getScoreColor(profitabilityScore) }]}
-              label={<Text size="xl">{profitabilityScore.toFixed(1)}</Text>}
-            />
-            <Text>Overall Profitability Score</Text>
-            <Text color="dimmed" size="sm">
-              Based on 5 key profitability metrics
-            </Text>
-          </Stack>
+          <Paper p="md" radius="md" className="ringContainer">
+            <Stack align="center" gap="xs">
+              <RingProgress
+                size={180}
+                thickness={18}
+                roundCaps
+                sections={[{ value: profitabilityScore, color: getScoreColor(profitabilityScore) }]}
+                label={
+                  <Stack gap={0} align="center">
+                    <Text size="xl" fw={700} className="scoreValue">
+                      {profitabilityScore.toFixed(1)}
+                    </Text>
+                    <Text size="xs" c="dimmed">
+                      out of 100
+                    </Text>
+                  </Stack>
+                }
+                className="scoreRing"
+              />
+              <Text fw={600} mt="md">
+                Overall Profitability Score
+              </Text>
+              <Text color="dimmed" size="sm" ta="center">
+                Based on 5 key profitability metrics compared to industry benchmarks
+              </Text>
+            </Stack>
+          </Paper>
         </Grid.Col>
 
         <Grid.Col span={8}>
-          <Stack>
+          <Stack gap="lg" className="metricsContainer">
             {metrics.map((metric, index) => (
-              <Stack key={index}>
-                <Group>
-                  <Text>{metric.name}</Text>
-                  <Group>
-                    <Text>{metric.value.toFixed(2)}%</Text>
+              <Paper key={index} p="md" radius="md" className="metricItem">
+                <Group justify="space-between" mb="xs">
+                  <Text fw={600}>{metric.name}</Text>
+                  <Group gap="xs">
+                    <Text fw={700} className={`metricValue ${getScoreColor((metric.score / 5) * 100)}`}>
+                      {metric.value.toFixed(2)}%
+                    </Text>
                     <Text color="dimmed" size="xs">
                       (Benchmark: {metric.benchmark}%)
                     </Text>
@@ -185,17 +202,17 @@ export const ProfitabilityScore = () => {
                 </Group>
 
                 <RingProgress
-                  size={24}
+                  size={28}
                   thickness={4}
                   roundCaps
                   sections={[{ value: (metric.score / 5) * 100, color: getScoreColor((metric.score / 5) * 100) }]}
                   label={<></>}
                 />
 
-                <Text color="dimmed" size="xs">
+                <Text color="dimmed" size="xs" mt="xs">
                   {metric.description}
                 </Text>
-              </Stack>
+              </Paper>
             ))}
           </Stack>
         </Grid.Col>

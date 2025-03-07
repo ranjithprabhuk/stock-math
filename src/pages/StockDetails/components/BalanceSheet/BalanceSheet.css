@@ -1,0 +1,118 @@
+/* BalanceSheet.css */
+.balance-sheet-container {
+  padding: 20px;
+  background: linear-gradient(to right, #f8f9fa, #e9ecef);
+  border-radius: 8px;
+}
+
+.balance-sheet-title {
+  color: #2c3e50;
+  font-weight: 700;
+  margin-bottom: 16px;
+  font-size: 1.8rem;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.fiscal-date {
+  color: #7f8c8d;
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+.balance-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  overflow: hidden;
+  margin-bottom: 20px !important;
+}
+
+.balance-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-header {
+  background: linear-gradient(135deg, #3498db, #2c3e50);
+  color: white;
+  padding: 15px;
+  border-radius: 8px 8px 0 0;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.assets-header {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.liabilities-header {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.chart-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+
+.stats-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 10px 15px;
+  background-color: rgba(236, 240, 241, 0.5);
+  border-radius: 6px;
+  margin-top: 15px;
+}
+
+.stat-item {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 15px;
+  border-left: 4px solid #3498db;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.stat-item strong {
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.stat-item.asset-stat {
+  border-left-color: #3498db;
+}
+
+.stat-item.liability-stat {
+  border-left-color: #e74c3c;
+}
+
+.stat-item.equity-stat {
+  border-left-color: #2ecc71;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.error-alert {
+  border-left: 5px solid #e74c3c;
+  background-color: #fadbd8;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .stats-group {
+    flex-direction: column;
+  }
+
+  .stat-item {
+    min-width: unset;
+  }
+}
