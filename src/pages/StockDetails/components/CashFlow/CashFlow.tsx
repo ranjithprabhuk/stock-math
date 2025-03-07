@@ -4,38 +4,14 @@ import { Accordion, Alert, Loader, Text, Title } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import AlphaVantageApiService from '../../../../services/alpha-vantage-service';
+import { useStockData } from '../../../../context/stock-data';
 
 interface ICashFlowProps {
   symbol: string;
 }
 
 const CashFlow: React.FC<ICashFlowProps> = ({ symbol }) => {
-  const [cashFlowData, setCashFlowData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const data = await AlphaVantageApiService.getCashFlow(symbol);
-
-        if (!data || !data.annualReports || data.annualReports.length === 0) {
-          setError('No cash flow data available');
-        } else {
-          setCashFlowData(data);
-          setError(null);
-        }
-      } catch (err) {
-        setError('Failed to load cash flow data');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [symbol]);
+  const { cashFlow: cashFlowData, errorCashFlow: error, loadingCashFlow: loading } = useStockData();
 
   if (loading) {
     return <Loader size="xl" />;
@@ -49,10 +25,14 @@ const CashFlow: React.FC<ICashFlowProps> = ({ symbol }) => {
     );
   }
 
+  if (!cashFlowData) {
+    return <Text>No data available</Text>;
+  }
+
   // Prepare data for charts
   const prepareChartData = (dataKey: string) => {
-    return cashFlowData.annualReports
-      .map((report: any) => ({
+    return cashFlowData?.annualReports
+      ?.map((report: any) => ({
         year: report.fiscalDateEnding.substring(0, 4),
         value: parseInt(report[dataKey]) || 0,
       }))
@@ -149,13 +129,13 @@ const CashFlow: React.FC<ICashFlowProps> = ({ symbol }) => {
           <Accordion.Panel>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart
-                data={prepareChartData('operatingCashflow').map((item: { value: number; year: any }) => ({
+                data={prepareChartData('operatingCashflow')?.map((item: { value: number; year: any }) => ({
                   ...item,
                   value:
                     item.value +
                     (parseInt(
-                      cashFlowData.annualReports.find((report: any) => report.fiscalDateEnding.includes(item.year))
-                        .capitalExpenditures
+                      cashFlowData?.annualReports?.find((report: any) => report?.fiscalDateEnding?.includes(item?.year))
+                        ?.capitalExpenditures || '0'
                     ) || 0),
                 }))}
               >

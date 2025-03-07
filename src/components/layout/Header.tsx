@@ -33,7 +33,12 @@ const Header: React.FC<HeaderProps> = () => {
 
         <Group>
           <div className="navigation-links">
-            <Button component={Link} to="/" variant={location.pathname === '/' ? 'filled' : 'subtle'} size="sm">
+            <Button
+              component={Link}
+              to="/stock-math"
+              variant={location.pathname === '/' ? 'filled' : 'subtle'}
+              size="sm"
+            >
               Home
             </Button>
           </div>

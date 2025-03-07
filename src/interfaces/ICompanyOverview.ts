@@ -46,4 +46,7 @@ export interface ICompanyOverview {
   SharesOutstanding: string;
   DividendDate: string;
   ExDividendDate: string;
+
+  // temp
+  price: string;
 }

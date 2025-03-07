@@ -15,40 +15,14 @@ import {
   ResponsiveContainer,
   ComposedChart,
 } from 'recharts';
-import { IEarnings } from '../../../../interfaces/IEarnings';
-import AlphaVantageApiService from '../../../../services/alpha-vantage-service';
+import { useStockData } from '../../../../context/stock-data';
 
 interface IEPSProps {
   symbol: string;
 }
 
 const EPS: React.FC<IEPSProps> = ({ symbol }) => {
-  const [earningsData, setEarningsData] = useState<IEarnings | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const data = await AlphaVantageApiService.getEarnings(symbol);
-
-        if (!data || !data.annualEarnings || data.annualEarnings.length === 0) {
-          setError('No earnings data available');
-        } else {
-          setEarningsData(data);
-          setError(null);
-        }
-      } catch (err) {
-        setError('Failed to load earnings data');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [symbol]);
+  const { eps: earningsData, errorEPS: error, loadingEPS: loading } = useStockData();
 
   if (loading) {
     return <Loader size="xl" />;
@@ -62,9 +36,13 @@ const EPS: React.FC<IEPSProps> = ({ symbol }) => {
     );
   }
 
+  if (!earningsData) {
+    return <Text>No data available</Text>;
+  }
+
   // Prepare annual EPS data
   const annualEpsData = earningsData?.annualEarnings
-    .map((item) => ({
+    ?.map((item) => ({
       year: item.fiscalDateEnding.substring(0, 4),
       eps: parseFloat(item.reportedEPS),
     }))
@@ -73,7 +51,7 @@ const EPS: React.FC<IEPSProps> = ({ symbol }) => {
 
   // Prepare quarterly EPS data
   const quarterlyEpsData = earningsData?.quarterlyEarnings
-    .map((item) => ({
+    ?.map((item) => ({
       quarter: `${item.fiscalDateEnding.substring(0, 4)} Q${Math.ceil(new Date(item.fiscalDateEnding).getMonth() / 3)}`,
       reported: parseFloat(item.reportedEPS),
       estimated: parseFloat(item.estimatedEPS) || null,

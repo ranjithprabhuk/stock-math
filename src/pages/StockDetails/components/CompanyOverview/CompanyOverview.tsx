@@ -2,40 +2,14 @@
 import { useEffect, useState } from 'react';
 import { Card, Group, Text, Badge, Grid, Loader, Alert } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { ICompanyOverview } from '../../../../interfaces/ICompanyOverview';
-import AlphaVantageApiService from '../../../../services/alpha-vantage-service';
+import { useStockData } from '../../../../context/stock-data';
 
 interface ICompanyOverviewProps {
   symbol: string;
 }
 
 const CompanyOverview: React.FC<ICompanyOverviewProps> = ({ symbol }) => {
-  const [overviewData, setOverviewData] = useState<ICompanyOverview | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const data = await AlphaVantageApiService.getCompanyOverview(symbol);
-
-        if (!data || Object.keys(data).length === 0) {
-          setError('No company data available');
-        } else {
-          setOverviewData(data);
-          setError(null);
-        }
-      } catch (err) {
-        setError('Failed to load company overview');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [symbol]);
+  const { companyOverview: overviewData, errorOverview: error, loadingOverview: loading } = useStockData();
 
   if (loading) {
     return <Loader size="xl" />;
@@ -47,6 +21,10 @@ const CompanyOverview: React.FC<ICompanyOverviewProps> = ({ symbol }) => {
         {error}
       </Alert>
     );
+  }
+
+  if (!overviewData) {
+    return <Text>No data available</Text>;
   }
 
   return (

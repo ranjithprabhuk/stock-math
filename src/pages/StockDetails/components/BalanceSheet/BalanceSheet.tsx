@@ -4,40 +4,15 @@ import { Alert, Grid, Card, Loader, Text, Title, Group } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import AlphaVantageApiService from '../../../../services/alpha-vantage-service';
+import { useStockData } from '../../../../context/stock-data';
 
 interface IBalanceSheetProps {
   symbol: string;
 }
 
 const BalanceSheet: React.FC<IBalanceSheetProps> = ({ symbol }) => {
-  const [balanceData, setBalanceData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { balanceSheet: balanceData, errorBalanceSheet: error, loadingBalanceSheet: loading } = useStockData();
   const [selectedYear, setSelectedYear] = useState<string>('');
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const data = await AlphaVantageApiService.getBalanceSheet(symbol);
-
-        if (!data || !data.annualReports || data.annualReports.length === 0) {
-          setError('No balance sheet data available');
-        } else {
-          setBalanceData(data);
-          setSelectedYear(data.annualReports[0].fiscalDateEnding.substring(0, 4));
-          setError(null);
-        }
-      } catch (err) {
-        setError('Failed to load balance sheet data');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [symbol]);
 
   if (loading) {
     return <Loader size="xl" />;
@@ -51,8 +26,12 @@ const BalanceSheet: React.FC<IBalanceSheetProps> = ({ symbol }) => {
     );
   }
 
+  if (!balanceData) {
+    return <Text>No data available</Text>;
+  }
+
   // Get the latest report
-  const latestReport = balanceData.annualReports[0];
+  const latestReport = balanceData?.annualReports?.[0] || ({} as any);
 
   // Format large numbers for better readability
   const formatCurrency = (value: string) => {

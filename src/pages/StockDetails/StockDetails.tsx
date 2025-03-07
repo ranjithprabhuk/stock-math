@@ -7,10 +7,22 @@ import IncomeStatement from './components/IncomeStatement/IncomeStatement';
 import BalanceSheet from './components/BalanceSheet/BalanceSheet';
 import CashFlow from './components/CashFlow/CashFlow';
 import EPS from './components/EPS/EPS';
+import { useStockData } from '../../context/stock-data';
+import StockAnalysisDashboard from './components/StockAnalysisDashboard/StockAnalysisDashboard';
 
 const StockDetails = () => {
   const { symbol } = useParams<{ symbol: string }>();
-  const [loading, setLoading] = useState(false);
+  const { fetchAllData, resetAllData } = useStockData();
+
+  useEffect(() => {
+    if (symbol) {
+      fetchAllData(symbol);
+    }
+
+    return () => {
+      resetAllData();
+    };
+  }, [symbol]);
 
   if (!symbol) {
     return <div>No stock symbol provided</div>;
@@ -18,12 +30,14 @@ const StockDetails = () => {
 
   return (
     <Paper p="md" style={{ position: 'relative' }}>
-      <LoadingOverlay visible={loading} />
+      {/* <LoadingOverlay visible={loading} /> */}
       <Title order={2} mb="md">
         {symbol} Stock Analysis
       </Title>
 
-      <Accordion multiple>
+      <StockAnalysisDashboard />
+
+      <Accordion multiple defaultValue={['overview', 'income', 'balance', 'cashflow', 'eps']}>
         <Accordion.Item value="overview">
           <Accordion.Control>
             <Text>Company Overview</Text>

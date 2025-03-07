@@ -2,6 +2,7 @@
 
 import { IStockSearchResult } from '../interfaces/IStockSearchResult';
 import { IStockSearchResponse } from '../interfaces/IStockSearchResponse';
+import { IQuote, IQuoteResponse } from '../interfaces/IQuote';
 
 class AlphaVantageApiService {
   private static baseUrl = process.env.REACT_APP_ALPHA_VANTAGE_BASE_URL;
@@ -116,6 +117,35 @@ class AlphaVantageApiService {
       return await response.json();
     } catch (error) {
       console.error('Error fetching earnings:', error);
+      throw error;
+    }
+  }
+
+  static async getGlobalQuote(symbol: string): Promise<IQuote> {
+    try {
+      const response = await fetch(`${this.baseUrl}query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${this.apiKey}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data: IQuoteResponse = await response.json();
+      const quote = data['Global Quote'];
+
+      // Transform the response to our clean interface
+      return {
+        symbol: quote['01. symbol'],
+        open: parseFloat(quote['02. open']),
+        high: parseFloat(quote['03. high']),
+        low: parseFloat(quote['04. low']),
+        price: parseFloat(quote['05. price']),
+        volume: parseInt(quote['06. volume'], 10),
+        latestTradingDay: quote['07. latest trading day'],
+        previousClose: parseFloat(quote['08. previous close']),
+        change: parseFloat(quote['09. change']),
+        changePercent: quote['10. change percent'],
+      };
+    } catch (error) {
+      console.error('Error fetching global quote:', error);
       throw error;
     }
   }

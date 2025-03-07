@@ -3,40 +3,15 @@ import { useEffect, useState } from 'react';
 import { Accordion, Alert, Loader, Text, Title, Card } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { IIncomeStatement, IIncomeStatementReport } from '../../../../interfaces/IIncomeStatement';
-import AlphaVantageApiService from '../../../../services/alpha-vantage-service';
+import { IIncomeStatementReport } from '../../../../interfaces/IIncomeStatement';
+import { useStockData } from '../../../../context/stock-data';
 
 interface IIncomeStatementProps {
   symbol: string;
 }
 
 const IncomeStatement: React.FC<IIncomeStatementProps> = ({ symbol }) => {
-  const [incomeData, setIncomeData] = useState<IIncomeStatement | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const data = await AlphaVantageApiService.getIncomeStatement(symbol);
-
-        if (!data || !data.annualReports || data.annualReports.length === 0) {
-          setError('No income statement data available');
-        } else {
-          setIncomeData(data);
-          setError(null);
-        }
-      } catch (err) {
-        setError('Failed to load income statement data');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [symbol]);
+  const { incomeStatement: incomeData, errorIncomeStatement: error, loadingIncomeStatement: loading } = useStockData();
 
   if (loading) {
     return <Loader size="xl" />;
@@ -50,10 +25,14 @@ const IncomeStatement: React.FC<IIncomeStatementProps> = ({ symbol }) => {
     );
   }
 
+  if (!incomeData) {
+    return <Text>No data available</Text>;
+  }
+
   // Prepare data for charts
   const prepareChartData = (dataKey: keyof IIncomeStatementReport) => {
     return incomeData?.annualReports
-      .map((report) => ({
+      ?.map((report) => ({
         year: report.fiscalDateEnding.substring(0, 4),
         value: parseInt(report[dataKey] as string) || 0,
       }))
