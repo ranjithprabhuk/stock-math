@@ -1,7 +1,8 @@
 // pages/StockDetails/StockDetails.tsx
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Title, Paper, LoadingOverlay, Accordion, Text } from '@mantine/core';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Title, Paper, LoadingOverlay, Accordion, Text, Notification } from '@mantine/core';
+import { Icon12Hours } from '@tabler/icons-react';
 import CompanyOverview from './components/CompanyOverview/CompanyOverview';
 import IncomeStatement from './components/IncomeStatement/IncomeStatement';
 import BalanceSheet from './components/BalanceSheet/BalanceSheet';
@@ -11,7 +12,8 @@ import { useStockData } from '../../context/stock-data';
 import StockAnalysisDashboard from './components/StockAnalysisDashboard/StockAnalysisDashboard';
 
 const StockDetails = () => {
-  const { symbol } = useParams<{ symbol: string }>();
+  const [searchParams] = useSearchParams();
+  const symbol = searchParams.get('symbol');
   const { fetchAllData, resetAllData } = useStockData();
 
   useEffect(() => {
@@ -25,7 +27,11 @@ const StockDetails = () => {
   }, [symbol]);
 
   if (!symbol) {
-    return <div>No stock symbol provided</div>;
+    return (
+      <Notification icon={'i'} color={'blue'} title={'No Symbol found'} withCloseButton={false}>
+        please go to the <Link to="/"> Home page </Link> and search for the stock again
+      </Notification>
+    );
   }
 
   return (

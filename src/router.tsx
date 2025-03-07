@@ -11,7 +11,7 @@ const AppRouter: React.FC = () => {
         <Routes>
           <Route path="/" element={<Navigate to="/stock-math/" replace={true} />} />
           <Route path="/stock-math/" element={<Home />} />
-          <Route path="/stock-math/stock/:symbol" element={<StockDetails />} />
+          <Route path="/stock-math/stock/" element={<StockDetails />} />
         </Routes>
       </AppShellLayout>
     </BrowserRouter>
