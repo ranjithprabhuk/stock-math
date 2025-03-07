@@ -59,7 +59,16 @@ const CashFlow: React.FC<ICashFlowProps> = ({ symbol }) => {
         {symbol} Cash Flow
       </Title>
 
-      <Accordion>
+      <Accordion
+        multiple
+        defaultValue={[
+          'operatingCashflow',
+          'capitalExpenditures',
+          'cashflowFromInvestment',
+          'cashflowFromFinancing',
+          'freeCashFlow',
+        ]}
+      >
         <Accordion.Item value="operatingCashflow">
           <Accordion.Control>Operating Cash Flow</Accordion.Control>
           <Accordion.Panel>

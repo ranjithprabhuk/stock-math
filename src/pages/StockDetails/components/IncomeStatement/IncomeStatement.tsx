@@ -52,7 +52,7 @@ const IncomeStatement: React.FC<IIncomeStatementProps> = ({ symbol }) => {
   return (
     <div>
       <Card shadow="sm" p="lg" radius="md" withBorder mb="md">
-        <Accordion multiple defaultValue={['revenue']}>
+        <Accordion multiple defaultValue={['revenue', 'grossProfit', 'operatingIncome', 'netIncome', 'ebitda']}>
           <Accordion.Item value="revenue">
             <Accordion.Control>Total Revenue</Accordion.Control>
             <Accordion.Panel>
